@@ -7,7 +7,7 @@ public class CharacterRotation : MonoBehaviour
     [SerializeField]
     CharacterMovement controller;
     [SerializeField]
-    float rotation_speed = 5f;
+    float rotation_speed = 2f;
 
     private void Update()
     {
