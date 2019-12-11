@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterPush : MonoBehaviour
 {
     [SerializeField]
-    CharacterController controller;
+    CharacterMovement controller;
     [SerializeField]
     public float force = 2f;
 
@@ -26,7 +26,6 @@ public class CharacterPush : MonoBehaviour
 
                 Vector3 positionThrowed = hittedObject.transform.position + (transform.forward * force);
 
-
                 hittedObject.transform.SetPositionAndRotation(positionThrowed, hittedObject.transform.rotation);
             }
             else
@@ -38,12 +37,4 @@ public class CharacterPush : MonoBehaviour
 
         }
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    // Draw a yellow sphere at the transform's position
-    //    Gizmos.color = Color.yellow;
-    //    Gizmos.DrawLine(controller.transform.position, controller.transform.position.normalized);
-    
-    //}
 }
