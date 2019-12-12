@@ -34,8 +34,6 @@ public class RBmovement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && _isGrounded)
         {
-            Debug.Log("EEEE");
-
             _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
         }
     }

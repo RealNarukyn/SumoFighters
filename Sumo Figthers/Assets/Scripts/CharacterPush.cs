@@ -5,37 +5,70 @@ using UnityEngine;
 public class CharacterPush : MonoBehaviour
 {
     [SerializeField]
-    public float force = 2f;
-    [SerializeField]
-    float shootAngle = 30;  // elevation angle
+    float shootAngle;                                           // Elevation Angle
 
-    const float distance_ray = 1.5f;
+    private const float force_min = 0f;                         //Min Force that will be applied.
+    private float force = force_min;                            //The FORCE that will be applied.
+    private const float force_max = 400f;                       //Max Force it can be applied.
 
+    private float multiplier = 5.53f;                           //The needed increment per frame to make it last 1.2 seconds.
+
+    private bool has_punched = false;                           //Knows wheter the player has punched or not.
+    private float timer = 0;                                    //Counter of the current time.
+    private const float time_reset_punch = 0.2f;                //Time it will last the boolean HAS_PUNCHED.
 
     // Update is called once per frame
     void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
+    {   
+        if (Input.GetKey(KeyCode.F))
         {
-            RaycastHit hit;
-            // Does the ray intersect any objects excluding the player layer
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distance_ray))
+            force += multiplier;
+
+            if (force >= force_max)
             {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                Debug.Log("Did Hit");
-
-                GameObject hittedObject = hit.transform.gameObject;
-                Debug.Log("HIT: " + hittedObject);
-
-                Vector3 positionThrowed = hittedObject.transform.position + (transform.forward * force * Time.deltaTime);
-
-                hittedObject.GetComponent<Rigidbody>().AddForce(ParabollicVel(hittedObject.transform.position, positionThrowed, shootAngle), ForceMode.Impulse);  
+                force = force_max;
+                multiplier *= -1;
             }
-            else
+
+            if (force <= force_min)
             {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * distance_ray, Color.white);
-                Debug.Log("Did not Hit");
+                force = force_min;
+                multiplier *= -1;
             }
+        }
+
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            has_punched = true;
+        }
+
+        if (has_punched)
+        {
+            timer += Time.deltaTime;
+            if (timer >= time_reset_punch)
+            {
+                ResetPunchStats();
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        float percent = force / force_max;
+        Gizmos.DrawSphere(transform.position, percent);           //For the moment is the way you can know visually with the force you're hitting. 
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (has_punched)
+        {
+            Vector3 positionThrowed = other.transform.position + (transform.forward * force * Time.deltaTime);
+
+            if(other.GetComponent<Rigidbody>())
+                other.GetComponent<Rigidbody>().AddForce(ParabollicVel(other.transform.position, positionThrowed, shootAngle), ForceMode.Impulse);
+
+
+            ResetPunchStats();
         }
     }
 
@@ -56,5 +89,11 @@ public class CharacterPush : MonoBehaviour
          
         return vel* dir.normalized;
     }
-    
+
+    private void ResetPunchStats() 
+    {
+        has_punched = false;
+        force = 0;
+        timer = 0;
+    }
 }
