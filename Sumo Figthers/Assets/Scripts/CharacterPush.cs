@@ -5,13 +5,11 @@ using UnityEngine;
 public class CharacterPush : MonoBehaviour
 {
     [SerializeField]
-    CharacterController controller;
-    [SerializeField]
     public float force = 2f;
     [SerializeField]
     float shootAngle = 30;  // elevation angle
-    [SerializeField]
-    float distance_ray = 1;
+
+    const float distance_ray = 1.5f;
 
 
     // Update is called once per frame
@@ -31,17 +29,7 @@ public class CharacterPush : MonoBehaviour
 
                 Vector3 positionThrowed = hittedObject.transform.position + (transform.forward * force * Time.deltaTime);
 
-                hittedObject.GetComponent<Rigidbody>().velocity = ParabollicVel(hittedObject.transform.position, positionThrowed, shootAngle);
-
-                #region TESTING WITH CHARACTER CONTROLLER COMPONENT
-                //CharacterController hit_controller = hittedObject.GetComponent<CharacterController>();
-                //Debug.Log(hit_controller);
-                //if ( hit_controller != null)
-                //    hit_controller.Move(ParabollicVel(hit_controller.transform.position, positionThrowed, shootAngle));
-                #endregion
-
-
-                //hittedObject.transform.SetPositionAndRotation(positionThrowed, hittedObject.transform.rotation);
+                hittedObject.GetComponent<Rigidbody>().AddForce(ParabollicVel(hittedObject.transform.position, positionThrowed, shootAngle), ForceMode.Impulse);  
             }
             else
             {
