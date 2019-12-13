@@ -8,14 +8,14 @@ public class MultipleTargetCamera : MonoBehaviour
     [SerializeField]
     private List<Transform> targets;
 
-    private Vector3 offset = new Vector3(0, 8, -15f);
+    public Vector3 offset = new Vector3(0f, 16f, -30f);
     private float smooth_time = .5f;
 
     private Vector3 velocity;
 
-    private float zoom_min = 80f;
-    private float zoom_max = 60f;
-    private float zoom_limiter = 90f;
+    private float zoom_min = 50f;
+    private float zoom_max = 16f;
+    private float zoom_limiter = 20f;
 
     private Camera cam;
 
@@ -32,6 +32,8 @@ public class MultipleTargetCamera : MonoBehaviour
 
         Move();
         Zoom();
+
+        CheckTargets();
     }
 
     Vector3 GetCenterPoint()
@@ -72,6 +74,17 @@ public class MultipleTargetCamera : MonoBehaviour
     {
         float zoom_new = Mathf.Lerp(zoom_max, zoom_min, GetGreatestDistance() / zoom_limiter);
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, zoom_new, Time.deltaTime);
+    }
+
+    private void CheckTargets() 
+    {
+        for (int i = 0; i < targets.Count; i++)
+        {
+            if (targets[i].position.y < 0)
+            {
+                targets.RemoveAt(i);
+            }
+        }
     }
 
 }

@@ -7,7 +7,7 @@ public class CharacterPush : MonoBehaviour
     [SerializeField]
     float shootAngle;                                           // Elevation Angle
 
-    private const float force_min = 0f;                         //Min Force that will be applied.
+    private const float force_min = 1f;                         //Min Force that will be applied.
     private float force = force_min;                            //The FORCE that will be applied.
     private const float force_max = 400f;                       //Max Force it can be applied.
 
@@ -19,22 +19,11 @@ public class CharacterPush : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   
+    {
         if (Input.GetButton("Push"))
         {
             force += multiplier;
-
-            if (force >= force_max)
-            {
-                force = force_max;
-                multiplier *= -1;
-            }
-
-            if (force <= force_min)
-            {
-                force = force_min;
-                multiplier *= -1;
-            }
+            CheckForce();
         }
 
         if (Input.GetButtonUp("Push"))
@@ -49,6 +38,21 @@ public class CharacterPush : MonoBehaviour
             {
                 ResetPunchStats();
             }
+        }
+    }
+
+    private void CheckForce()
+    {
+        if (force > force_max)
+        {
+            force = force_max;
+            multiplier *= -1;
+        }
+
+        if (force < force_min)
+        {
+            force = force_min;
+            multiplier *= -1;
         }
     }
 
