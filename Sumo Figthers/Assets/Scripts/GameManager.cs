@@ -5,7 +5,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
-
     private void Awake()
     {
         if (instance == null)
@@ -15,4 +14,7 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(this);
     }
+
+    public int players = 0;
+
 }
