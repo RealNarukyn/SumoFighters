@@ -20,7 +20,7 @@ public class CharacterPush : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        if (Input.GetKey(KeyCode.F))
+        if (Input.GetButton("Push"))
         {
             force += multiplier;
 
@@ -37,7 +37,7 @@ public class CharacterPush : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.F))
+        if (Input.GetButtonUp("Push"))
         {
             has_punched = true;
         }
@@ -72,20 +72,21 @@ public class CharacterPush : MonoBehaviour
         }
     }
 
+
     private Vector3 ParabollicVel(Vector3 origin, Vector3 throwed_position, float angle) 
     {
-        Vector3 dir = throwed_position - origin;  // get target direction
-        float h = dir.y;  // get height difference
-        dir.y = 0;  // retain only the horizontal direction
+        Vector3 dir = throwed_position - origin;                                             //Get target direction
+        float h = dir.y;                                                                     //Get height difference
+        dir.y = 0;                                                                           //Retain only the horizontal direction
         
-        float dist = dir.magnitude;  // get horizontal distance
-        float radian_angle = angle * Mathf.Deg2Rad;  // convert angle to radians
+        float dist = dir.magnitude;                                                          //Get horizontal distance
+        float radian_angle = angle * Mathf.Deg2Rad;                                          //Convert angle to radians
         
-        dir.y = dist* Mathf.Tan(radian_angle);  // set dir to the elevation angle
-        dist += h / Mathf.Tan(radian_angle);  // correct for small height differences
-         
+        dir.y = dist* Mathf.Tan(radian_angle);                                               //Set dir to the elevation angle
+        dist += h / Mathf.Tan(radian_angle);                                                 //Correct for small height differences
+
         // calculate the velocity magnitude
-         float vel = Mathf.Sqrt(dist * Physics.gravity.magnitude / Mathf.Sin(2 * radian_angle));
+        float vel = Mathf.Sqrt(dist * Physics.gravity.magnitude / Mathf.Sin(2 * radian_angle));
          
         return vel* dir.normalized;
     }
@@ -96,4 +97,8 @@ public class CharacterPush : MonoBehaviour
         force = 0;
         timer = 0;
     }
+
+
+
 }
+
