@@ -34,7 +34,8 @@ public class CharacterMovement : MonoBehaviour
 
     public void Jump()
     {
-        _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
+        if(_isGrounded)
+            _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
     }
 
     void FixedUpdate()
