@@ -41,7 +41,6 @@ GameObject:
   - component: {fileID: 8503743507772395665}
   - component: {fileID: 8503743507772395666}
   - component: {fileID: 8503743507772395667}
-  - component: {fileID: 8503743507772395664}
   m_Layer: 0
   m_Name: Nose
   m_TagString: Untagged
@@ -108,19 +107,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &8503743507772395664
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8503743507772395678}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8503743507930218738
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,5 +299,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 261951ea272d79c4db2cf4f9c565474f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  multiplier: 2
   shootAngle: 50

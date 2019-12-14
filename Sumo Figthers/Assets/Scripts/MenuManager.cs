@@ -28,7 +28,7 @@ public class MenuManager : MonoBehaviour
         int players = int.Parse(splitArray[1]);
 
 
-        GameManager.instance.players = players;
+        GameManager.instance.num_players = players;
 
         SceneManager.LoadScene("BattleArena");
     }
