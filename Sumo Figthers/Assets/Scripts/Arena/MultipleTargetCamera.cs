@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class MultipleTargetCamera : MonoBehaviour
 {
-    [SerializeField]
+    
     private List<Transform> targets;
 
     public Vector3 offset = new Vector3(0f, 16f, -30f);
@@ -20,9 +20,10 @@ public class MultipleTargetCamera : MonoBehaviour
     private Camera cam;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         cam = GetComponent<Camera>();
+        targets = new List<Transform>();
     }
 
     private void LateUpdate()
@@ -87,4 +88,5 @@ public class MultipleTargetCamera : MonoBehaviour
         }
     }
 
+    public void AddTargetToCamera(Transform target) { targets.Add(target); }
 }

@@ -15,29 +15,47 @@ public class CharacterPush : MonoBehaviour
 
     private bool has_punched = false;                           //Knows wheter the player has punched or not.
     private float timer = 0;                                    //Counter of the current time.
-    private const float time_reset_punch = 0.2f;                //Time it will last the boolean HAS_PUNCHED.
+    private const float time_reset_punch = 0.01f;                //Time it will last the boolean HAS_PUNCHED.
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButton("Push"))
-        {
-            force += multiplier;
-            CheckForce();
-        }
+        //if (Input.GetButton("Push"))
+        //{
+        //    force += multiplier;
+        //    CheckForce();
+        //}
 
-        if (Input.GetButtonUp("Push"))
-        {
-            has_punched = true;
-        }
+        //if (has_punched)
+        //{
+        //    timer += Time.deltaTime;
+        //    if (timer >= time_reset_punch)
+        //    {
+        //        ResetPunchStats();
+        //    }
+        //}
 
-        if (has_punched)
+        //if (Input.GetButtonUp("Push"))
+        //{
+        //    has_punched = true;
+        //}
+    }
+
+    public void ChargePush()
+    {
+        Debug.Log("HEY");
+        force += multiplier;
+        CheckForce();
+    }
+
+    public void Push()
+    {
+        has_punched = true;
+
+        timer += Time.deltaTime;
+        if (timer >= time_reset_punch)
         {
-            timer += Time.deltaTime;
-            if (timer >= time_reset_punch)
-            {
-                ResetPunchStats();
-            }
+            ResetPunchStats();
         }
     }
 
@@ -101,8 +119,4 @@ public class CharacterPush : MonoBehaviour
         force = 0;
         timer = 0;
     }
-
-
-
 }
-

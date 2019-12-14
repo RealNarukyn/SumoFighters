@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RBmovement : MonoBehaviour
+
+public class CharacterMovement : MonoBehaviour
 {
     public float Speed = 5f;
     public float JumpHeight = 2f;
@@ -10,18 +11,17 @@ public class RBmovement : MonoBehaviour
     public float DashDistance = 5f;
     public LayerMask Ground;
 
-    private Rigidbody _body;
+    
     private Vector3 _inputs = Vector3.zero;
-    private bool _isGrounded = true;
+    public bool _isGrounded = true;
+
+    [SerializeField]
+    private Rigidbody _body;
+    [SerializeField]
     private Transform _groundChecker;
 
-    void Start()
-    {
-        _body = GetComponent<Rigidbody>();
-        _groundChecker = transform.GetChild(1);
-    }
 
-    void Update()
+    public void Move()
     {
         _isGrounded = Physics.CheckSphere(_groundChecker.position, GroundDistance, Ground, QueryTriggerInteraction.Ignore);
 
@@ -30,14 +30,12 @@ public class RBmovement : MonoBehaviour
         _inputs.z = Input.GetAxis("Vertical");
         if (_inputs != Vector3.zero)
             transform.forward = _inputs;
-
-
-        if (Input.GetButtonDown("Jump") && _isGrounded)
-        {
-            _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
-        }
     }
 
+    public void Jump()
+    {
+        _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
+    }
 
     void FixedUpdate()
     {
