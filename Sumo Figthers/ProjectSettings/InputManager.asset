@@ -211,7 +211,7 @@ InputManager:
     snap: 1
     invert: 0
     type: 2
-    axis: 5
+    axis: 0
     joyNum: 1
   - serializedVersion: 3
     m_Name: Joy1X
@@ -227,7 +227,7 @@ InputManager:
     snap: 1
     invert: 0
     type: 2
-    axis: 5
+    axis: 0
     joyNum: 2
   - serializedVersion: 3
     m_Name: Joy2X
@@ -243,7 +243,7 @@ InputManager:
     snap: 1
     invert: 0
     type: 2
-    axis: 5
+    axis: 0
     joyNum: 3
   - serializedVersion: 3
     m_Name: Joy3X
@@ -259,7 +259,7 @@ InputManager:
     snap: 1
     invert: 0
     type: 2
-    axis: 5
+    axis: 0
     joyNum: 4
   - serializedVersion: 3
     m_Name: Joy0Z
@@ -275,7 +275,7 @@ InputManager:
     snap: 1
     invert: 0
     type: 2
-    axis: 6
+    axis: 1
     joyNum: 1
   - serializedVersion: 3
     m_Name: Joy1Z
@@ -291,7 +291,7 @@ InputManager:
     snap: 1
     invert: 0
     type: 2
-    axis: 6
+    axis: 1
     joyNum: 2
   - serializedVersion: 3
     m_Name: Joy2Z
@@ -307,7 +307,7 @@ InputManager:
     snap: 1
     invert: 0
     type: 2
-    axis: 6
+    axis: 1
     joyNum: 3
   - serializedVersion: 3
     m_Name: Joy3Z
@@ -323,7 +323,7 @@ InputManager:
     snap: 1
     invert: 0
     type: 2
-    axis: 6
+    axis: 1
     joyNum: 4
   - serializedVersion: 3
     m_Name: Joy0Push

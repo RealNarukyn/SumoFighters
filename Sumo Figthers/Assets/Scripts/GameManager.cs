@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
             {
                 for(int i = 0; i < num_players; i++)
                 {
-                    movements[i].Move();
+                    movements[i].Move(i);
 
                     if (Input.GetButtonDown("Jump"))
                     {
