@@ -23,43 +23,18 @@ public class CharacterMovement : MonoBehaviour
 
     public void Move(int player)
     {
-        Debug.Log("Player: " + player);
-
         _isGrounded = Physics.CheckSphere(_groundChecker.position, GroundDistance, Ground, QueryTriggerInteraction.Ignore);
 
         _inputs = Vector3.zero;
-        switch (player)
-        {
-            case 0:
-                _inputs.x = Input.GetAxis("Joy0X");
-                _inputs.z = Input.GetAxis("Joy0Z") * -1;
-                break;
-            case 1:
-                _inputs.x = Input.GetAxis("Joy1X");
-                _inputs.z = Input.GetAxis("Joy1Z") * -1;
-                break;
-            case 2:
-                _inputs.x = Input.GetAxis("Joy2X");
-                _inputs.z = Input.GetAxis("Joy2Z") * -1;
-                break;
-            case 3:
-                _inputs.x = Input.GetAxis("Joy3X");
-                _inputs.z = Input.GetAxis("Joy3Z") * -1;
-                break;
-            default: break;
-        }
 
-        //_inputs.x = Input.GetAxis("Horizontal");
-        //_inputs.z = Input.GetAxis("Vertical");
-
-
-        Debug.Log("Player: " + player + " -- Inputs: " + _inputs);
+        _inputs.x = Input.GetAxis("Joy" + player + "X");
+        _inputs.z = Input.GetAxis("Joy" + player + "Z") * -1;
 
         if (_inputs != Vector3.zero)
             transform.forward = _inputs;
     }
 
-    public void Jump()
+    public void Jump(int player)
     {
         if(_isGrounded)
             _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);

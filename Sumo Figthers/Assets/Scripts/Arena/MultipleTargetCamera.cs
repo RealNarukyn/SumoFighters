@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class MultipleTargetCamera : MonoBehaviour
 {
-    
+    [SerializeField]
     private List<Transform> targets;
 
     public Vector3 offset = new Vector3(0f, 16f, -30f);
@@ -15,8 +15,8 @@ public class MultipleTargetCamera : MonoBehaviour
 
     private float zoom_min = 50f;
     private float zoom_max = 25f;
-    private float zoom_limiter = 20f;
-
+    private float zoom_limiter = 40f;
+    
     private Camera cam;
 
     // Start is called before the first frame update
@@ -81,7 +81,7 @@ public class MultipleTargetCamera : MonoBehaviour
     {
         for (int i = 0; i < targets.Count; i++)
         {
-            if (targets[i].position.y < 0)
+            if (targets[i].position.y < -1)
             {
                 targets.RemoveAt(i);
             }

@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (SceneManager.GetActiveScene().name == "BattleArena")
         {
@@ -62,39 +62,9 @@ public class GameManager : MonoBehaviour
 
             if (is_playable)
             {
-                for(int i = 0; i < num_players; i++)
-                {
-                    movements[i].Move(i);
-
-                    if (Input.GetButtonDown("Jump"))
-                    {
-                        movements[i].Jump();
-                    }
-                    
-                }
+                PlayersMove();
+                PlayersPush();
             }
-
-            //if (is_playable)
-            //{
-            //    movement.Move();
-
-            //    if (Input.GetButton("Jump") && movement._isGrounded)
-            //    {
-            //        movement.Jump();
-            //    }
-
-            //    if (Input.GetButton("Push"))
-            //    {
-            //        push.ChargePush();
-            //    }
-
-            //    if (Input.GetButtonUp("Push"))
-            //    {
-            //        push.Push();
-            //    }
-            
-            //}
-                
         }
     }
 
@@ -130,4 +100,41 @@ public class GameManager : MonoBehaviour
         players_loaded = !players_loaded;
         is_playable = !is_playable;
     }
+
+    private void PlayersMove()
+    {
+        for (int i = 0; i < num_players; i++)
+        {
+            movements[i].Move(i);
+            
+            if (Input.GetButtonDown("Joy" + i + "Jump"))
+            {
+                movements[i].Jump(i);
+            }
+
+            //if (Input.GetButtonDown("Joy3Jump"))
+            //{
+            //    movements[0].Jump(i);
+            //}
+
+
+        }
+    }
+
+    private void PlayersPush()
+    {
+        for (int i = 0; i < num_players; i++)
+        {
+            if (Input.GetButton("Joy" + i + "Push"))
+            {
+                pushes[i].ChargePush();
+            }
+
+            if (Input.GetButtonUp("Joy" + i + "Push"))
+            {
+                pushes[i].Push();
+            }
+        }
+    }
+    
 }

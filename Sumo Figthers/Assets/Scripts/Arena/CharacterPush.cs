@@ -43,7 +43,6 @@ public class CharacterPush : MonoBehaviour
 
     public void ChargePush()
     {
-        Debug.Log("HEY");
         force += multiplier;
         CheckForce();
     }
@@ -82,8 +81,12 @@ public class CharacterPush : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        Debug.Log("COLLIDING");
+        Debug.Log("HAS PUNCHED STATE: " + has_punched);
+        
         if (has_punched)
         {
+            Debug.Log("HEY");
             Vector3 positionThrowed = other.transform.position + (transform.forward * force * Time.deltaTime);
 
             if(other.GetComponent<Rigidbody>())
