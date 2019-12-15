@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    public float Speed = 5f;
+    public float Speed = 8f;
     public float JumpHeight = 2f;
     public float GroundDistance = 0.2f;
     public float DashDistance = 5f;
@@ -13,7 +13,7 @@ public class CharacterMovement : MonoBehaviour
 
     
     private Vector3 _inputs = Vector3.zero;
-    public bool _isGrounded = true;
+    private bool _isGrounded = true;
 
     [SerializeField]
     private Rigidbody _body;
@@ -40,8 +40,13 @@ public class CharacterMovement : MonoBehaviour
             _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
     }
 
-    void FixedUpdate()
+    public void FixJump()
     {
         _body.MovePosition(_body.position + _inputs * Speed * Time.fixedDeltaTime);
     }
+
+    //void FixedUpdate()
+    //{
+    //    _body.MovePosition(_body.position + _inputs * Speed * Time.fixedDeltaTime);
+    //}
 }

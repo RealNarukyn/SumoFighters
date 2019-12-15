@@ -15,31 +15,7 @@ public class CharacterPush : MonoBehaviour
 
     private bool has_punched = false;                           //Knows wheter the player has punched or not.
     private float timer = 0;                                    //Counter of the current time.
-    private const float time_reset_punch = 0.01f;                //Time it will last the boolean HAS_PUNCHED.
-
-    // Update is called once per frame
-    void Update()
-    {
-        //if (Input.GetButton("Push"))
-        //{
-        //    force += multiplier;
-        //    CheckForce();
-        //}
-
-        //if (has_punched)
-        //{
-        //    timer += Time.deltaTime;
-        //    if (timer >= time_reset_punch)
-        //    {
-        //        ResetPunchStats();
-        //    }
-        //}
-
-        //if (Input.GetButtonUp("Push"))
-        //{
-        //    has_punched = true;
-        //}
-    }
+    private const float time_reset_punch = .5f;                //Time it will last the boolean HAS_PUNCHED.
 
     public void ChargePush()
     {

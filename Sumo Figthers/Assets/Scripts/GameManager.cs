@@ -36,8 +36,6 @@ public class GameManager : MonoBehaviour
 
 
 
-    
-
     private void Start()
     {
         fighters = new List<GameObject>();
@@ -64,6 +62,17 @@ public class GameManager : MonoBehaviour
             {
                 PlayersMove();
                 PlayersPush();
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (is_playable)
+        {
+            foreach (CharacterMovement move in movements)
+            {
+                move.FixJump();
             }
         }
     }
@@ -111,13 +120,6 @@ public class GameManager : MonoBehaviour
             {
                 movements[i].Jump(i);
             }
-
-            //if (Input.GetButtonDown("Joy3Jump"))
-            //{
-            //    movements[0].Jump(i);
-            //}
-
-
         }
     }
 

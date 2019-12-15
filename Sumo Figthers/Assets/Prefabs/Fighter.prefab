@@ -239,7 +239,6 @@ MonoBehaviour:
   Ground:
     serializedVersion: 2
     m_Bits: 512
-  _isGrounded: 1
   _body: {fileID: 8503743507930218740}
   _groundChecker: {fileID: 8503743506437753186}
 --- !u!1 &8503743508027038728
