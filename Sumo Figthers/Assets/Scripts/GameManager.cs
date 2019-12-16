@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         pushes = new List<CharacterPush>();
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         if (SceneManager.GetActiveScene().name == "BattleArena")
         {
@@ -55,6 +55,11 @@ public class GameManager : MonoBehaviour
                 PlayersMove();
                 PlayersPush();
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0)
+            {
+                ReloadPlayers();                
+            }
         }
     }
 
@@ -66,6 +71,8 @@ public class GameManager : MonoBehaviour
             {
                 move.FixMove();
             }
+
+            CheckPlayers();
         }
     }
     
@@ -105,6 +112,29 @@ public class GameManager : MonoBehaviour
                 break;
 
             default: break;
+        }
+    }
+
+    //@TODO:
+    //Mover esta variable players_out = 0;
+    private float players_out = 0;
+    private void CheckPlayers()
+    {
+        foreach (GameObject player in fighters)
+        {
+            if (player.transform.position.y < -5)
+            {
+                player.SetActive(false);
+
+                player.transform.position = new Vector3(0, 20, 0);
+                players_out++;
+                Debug.Log("PLAYERS OUT: " + players_out);
+            }
+        }
+
+        if (players_out >= num_players - 1)
+        {
+            Time.timeScale = 0;
         }
     }
 
@@ -164,5 +194,18 @@ public class GameManager : MonoBehaviour
 
             pushes[i].UpdateForceSphere();
         }
+    }
+
+    private void ReloadPlayers()
+    {
+        for (int i = 0; i < num_players; i++)
+        {
+            SelectSpawnPoints(i);
+            fighters[i].transform.position = position;
+            fighters[i].SetActive(true);
+        }
+
+        players_out = 0;
+        Time.timeScale = 1;
     }
 }
