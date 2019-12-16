@@ -54,12 +54,6 @@ public class GameManager : MonoBehaviour
             {
                 PlayersMove();
                 PlayersPush();
-
-                if(Input.GetKeyDown(KeyCode.Escape))
-                {
-                    is_playable = !is_playable;
-                    SceneManager.LoadScene("Menu");
-                }
             }
         }
     }
