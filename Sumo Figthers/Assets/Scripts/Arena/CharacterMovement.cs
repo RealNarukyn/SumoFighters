@@ -40,13 +40,8 @@ public class CharacterMovement : MonoBehaviour
             _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
     }
 
-    public void FixJump()
+    public void FixMove()
     {
         _body.MovePosition(_body.position + _inputs * Speed * Time.fixedDeltaTime);
     }
-
-    //void FixedUpdate()
-    //{
-    //    _body.MovePosition(_body.position + _inputs * Speed * Time.fixedDeltaTime);
-    //}
 }

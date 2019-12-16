@@ -11,6 +11,11 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     GameObject selection_panel;
 
+    private void Start()
+    {
+        //menu_panel = new
+    }
+
     public void ButtonPlay()
     {
         menu_panel.SetActive(false);

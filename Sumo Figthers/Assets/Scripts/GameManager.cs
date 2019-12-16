@@ -31,9 +31,7 @@ public class GameManager : MonoBehaviour
     private MultipleTargetCamera cam;
     
     private bool players_loaded = false;
-    private bool properties_loaded = false;
     private bool is_playable = false;
-
 
 
     private void Start()
@@ -41,7 +39,6 @@ public class GameManager : MonoBehaviour
         fighters = new List<GameObject>();
         movements = new List<CharacterMovement>();
         pushes = new List<CharacterPush>();
-        
     }
 
     private void LateUpdate()
@@ -51,17 +48,18 @@ public class GameManager : MonoBehaviour
             if (!players_loaded)
             {
                 LoadPlayers();
-
-                foreach (GameObject c in fighters)
-                {
-                    Debug.Log(c.name);
-                }
             }
 
             if (is_playable)
             {
                 PlayersMove();
                 PlayersPush();
+
+                if(Input.GetKeyDown(KeyCode.Escape))
+                {
+                    is_playable = !is_playable;
+                    SceneManager.LoadScene("Menu");
+                }
             }
         }
     }
@@ -72,8 +70,47 @@ public class GameManager : MonoBehaviour
         {
             foreach (CharacterMovement move in movements)
             {
-                move.FixJump();
+                move.FixMove();
             }
+        }
+    }
+    
+    //@TODO:
+    //Cambiar esta variable para que no exista de manera global
+    Vector3 position;
+    private void SelectSpawnPoints(int player)
+    {
+        switch (num_players)
+        {
+            case 1:
+                position = new Vector3(0, 5, 0);     
+                break;
+            case 2:
+                if (player == 1)
+                    position = new Vector3(5, 5, 10);
+                else 
+                    position = new Vector3(-5, 5, -10);
+                break;
+            case 3:
+                if (player == 2)
+                    position = new Vector3(0, 5, 10);
+                else if (player == 1)
+                    position = new Vector3(5, 5, -10);
+                else 
+                    position = new Vector3(-5, 5, -10);
+                break;
+            case 4:
+                if (player == 3)
+                    position = new Vector3(5, 5, 10);
+                else if (player == 2)
+                    position = new Vector3(5, 5, -10);
+                else if (player == 1)
+                    position = new Vector3(-5, 5, 10);
+                else 
+                    position = new Vector3(-5, 5, -10);
+                break;
+
+            default: break;
         }
     }
 
@@ -83,16 +120,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < num_players; i++)
         {
-            Vector3 position;
-
-            if(i == 3)
-                position = new Vector3(5, 5, 10);
-            else if(i == 2)
-                position = new Vector3(5, 5, -10);
-            else if (i == 1)
-                position = new Vector3(-5, 5, 10);
-            else 
-                position = new Vector3(-5, 5, -10);
+            SelectSpawnPoints(i);
 
             fighters.Add(Instantiate(player_prefab, position, Quaternion.Euler(0, 0, 0)));
             cam.AddTargetToCamera(fighters[i].transform);
@@ -103,7 +131,8 @@ public class GameManager : MonoBehaviour
 
             fighters[i].GetComponent<MeshRenderer>().material = player_materials[i];
             fighters[i].name = player_materials[i].name;
-            fighters[i].transform.LookAt(new Vector3(0,5,0));
+            if (num_players > 1)
+                fighters[i].transform.LookAt(new Vector3(0,5,0));
         }
 
         players_loaded = !players_loaded;
@@ -136,7 +165,10 @@ public class GameManager : MonoBehaviour
             {
                 pushes[i].Push();
             }
+
+            pushes[i].LookPunchCD();
+
+            pushes[i].UpdateForceSphere();
         }
     }
-    
 }

@@ -6,6 +6,8 @@ public class CharacterPush : MonoBehaviour
 {
     [SerializeField]
     float shootAngle;                                           // Elevation Angle
+    [SerializeField]
+    Transform force_sphere;
 
     private const float force_min = 1f;                         //Min Force that will be applied.
     private float force = force_min;                            //The FORCE that will be applied.
@@ -15,7 +17,7 @@ public class CharacterPush : MonoBehaviour
 
     private bool has_punched = false;                           //Knows wheter the player has punched or not.
     private float timer = 0;                                    //Counter of the current time.
-    private const float time_reset_punch = .5f;                //Time it will last the boolean HAS_PUNCHED.
+    private const float time_reset_punch = 0.4f;                //Time it will last the boolean HAS_PUNCHED.
 
     public void ChargePush()
     {
@@ -27,11 +29,29 @@ public class CharacterPush : MonoBehaviour
     {
         has_punched = true;
 
-        timer += Time.deltaTime;
-        if (timer >= time_reset_punch)
+        //timer += Time.deltaTime;
+        //if (timer >= time_reset_punch)
+        //{
+        //    ResetPunchStats();
+        //}
+    }
+
+    public void LookPunchCD()
+    {
+        if (has_punched)
         {
-            ResetPunchStats();
+            timer += Time.deltaTime;
+            if (timer >= time_reset_punch)
+            {
+                ResetPunchStats();
+            }
         }
+    }
+
+    public void UpdateForceSphere()
+    {
+        float percent = force / force_max;
+        force_sphere.localScale = new Vector3(percent, percent, percent);
     }
 
     private void CheckForce()
@@ -98,4 +118,6 @@ public class CharacterPush : MonoBehaviour
         force = 0;
         timer = 0;
     }
+
+    
 }
