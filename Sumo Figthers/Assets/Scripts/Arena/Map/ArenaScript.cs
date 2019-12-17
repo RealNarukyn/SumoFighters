@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class ArenaScript : MonoBehaviour
 {
-    [SerializeField]
-    private Vector3 size_min;
-    [SerializeField]
-    private Vector3 size_normal;
-    [SerializeField]
-    private float speed_decrease;
-
+     private Vector3 size_min = new Vector3(10, 1, 10);
+     private Vector3 size_normal = new Vector3(30, 1, 30);
+     private float speed_decrease = 0.8f;
 
     public void UpdateSize()
     {

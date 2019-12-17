@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     private GameObject player_prefab;
     [SerializeField]
     private GameObject panel_escape;
+    [SerializeField]
+    private GameObject panel_advice;
 
     public int num_players = 0;
 
@@ -25,6 +27,7 @@ public class GameManager : MonoBehaviour
 
     private bool players_loaded = false;
     private bool is_playable = false;
+    private bool is_advicing = true;
 
 
 
@@ -53,7 +56,12 @@ public class GameManager : MonoBehaviour
                 LoadPlayers();
             }
 
-            if (is_playable)
+            if (is_advicing && Input.GetKeyDown(KeyCode.G))
+            {
+                StartPlay();
+            }
+
+            if (!is_advicing && is_playable)
             {
                 PlayersMove();
                 PlayersPush();
@@ -64,16 +72,14 @@ public class GameManager : MonoBehaviour
                 ReloadPlayers();
             }
 
-            if (Input.GetKey(KeyCode.LeftAlt))
+            if (Input.GetKeyDown(KeyCode.F))
             {
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    RestartPlayers();
-                }
+                RestartPlayers();
             }
         }
     }
-
+    
+    
     private void FixedUpdate()
     {
         if (is_playable)
@@ -85,6 +91,59 @@ public class GameManager : MonoBehaviour
 
             TakeOutPlayers();
             CheckPlayers();
+        }
+    }
+
+
+
+
+    private void StartPlay()
+    {
+        is_advicing = !is_advicing;
+        panel_advice.SetActive(false);
+        is_playable = !is_playable;
+    }
+
+    //@TODO:
+    //Mover esta variable players_out = 0;
+    private float players_in = 0;
+    private void TakeOutPlayers()
+    {
+        foreach (GameObject player in fighters)
+        {
+            if (player.transform.position.y < -5)
+            {
+                player.SetActive(false);
+
+                player.transform.position = new Vector3(0, 20, 0);
+                players_in--;
+                Debug.Log("PLAYERS IN GAME: " + players_in);
+            }
+        }
+    }
+
+    private void CheckPlayers()
+    {
+        switch (num_players)
+        {
+            case 1:
+                //For the moment I don't need any funcitonality here.
+                //This is the case for the IA.
+                break;
+            case 2:
+            case 3:
+            case 4:
+                if (players_in < 3)
+                {
+                    arena.UpdateSize();
+                }
+                
+                if (players_in <= 1)
+                {
+                    Time.timeScale = 0;
+                    panel_escape.SetActive(true);
+                }
+                break;
         }
     }
 
@@ -127,55 +186,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //@TODO:
-    //Mover esta variable players_out = 0;
-    private float players_in = 0;
-    private void TakeOutPlayers()
-    {
-        foreach (GameObject player in fighters)
-        {
-            if (player.transform.position.y < -5)
-            {
-                player.SetActive(false);
-
-                player.transform.position = new Vector3(0, 20, 0);
-                players_in--;
-                Debug.Log("PLAYERS IN GAME: " + players_in);
-            }
-        }
-    }
-
-    private void CheckPlayers()
-    {
-        switch (num_players)
-        {
-            case 1:
-                //For the moment I don't need any funcitonality here.
-                //This is the case for the IA.
-                break;
-            case 2:
-            case 3:
-            case 4:
-                if (players_in <= 3)
-                {
-                    arena.UpdateSize();
-                }
-                
-                if (players_in <= 1)
-                {
-                    Time.timeScale = 0;
-                    panel_escape.SetActive(true);
-                }
-                break;
-        }
-    }
-
     private void LoadPlayers()
     {
         cam = FindObjectOfType<MultipleTargetCamera>();
         arena = FindObjectOfType<ArenaScript>();
 
-        panel_escape = FindObjectOfType<Canvas>().transform.GetChild(0).gameObject;
+        panel_advice = FindObjectOfType<Canvas>().transform.GetChild(0).gameObject;
+        panel_escape = FindObjectOfType<Canvas>().transform.GetChild(1).gameObject;
 
         for (int i = 0; i < num_players; i++)
         {
@@ -196,11 +213,12 @@ public class GameManager : MonoBehaviour
 
 
         players_in = num_players;
-
         players_loaded = !players_loaded;
-        is_playable = !is_playable;
+        
+        //is_playable = !is_playable;
     }
 
+    #region Players Actions
     private void PlayersMove()
     {
         for (int i = 0; i < num_players; i++)
@@ -234,6 +252,7 @@ public class GameManager : MonoBehaviour
             pushes[i].UpdateForceArea();
         }
     }
+    #endregion
 
     #region Loading Players Functions
     //This function reloads the position of the players without clearing lists.
@@ -263,16 +282,16 @@ public class GameManager : MonoBehaviour
     {
         players_loaded = false;
         is_playable = false;
+        is_advicing = true;
+        players_in = 0;
 
         fighters.Clear();
         movements.Clear();
         pushes.Clear();
-
         cam.ClearCamera();
 
-        panel_escape.SetActive(false);
-        players_in = 0;
         Time.timeScale = 1;
+
 
         SceneManager.LoadScene("Menu");
     }
