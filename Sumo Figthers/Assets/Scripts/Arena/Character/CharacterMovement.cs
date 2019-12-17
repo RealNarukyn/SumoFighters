@@ -5,10 +5,14 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    public float Speed = 8f;
-    public float JumpHeight = 2f;
-    public float GroundDistance = 0.2f;
-    public float DashDistance = 5f;
+    private float Speed = 8f;
+    private float speed_limiter = 0.5f;
+    private float JumpHeight = 2f;
+    private float GroundDistance = 0.2f;
+    
+    //Maybe I can add it to the game.
+    //private float DashDistance = 5f;
+    
     public LayerMask Ground;
 
     
@@ -19,6 +23,8 @@ public class CharacterMovement : MonoBehaviour
     private Rigidbody _body;
     [SerializeField]
     private Transform _groundChecker;
+    
+    
 
 
     public void Move(int player)
@@ -29,6 +35,13 @@ public class CharacterMovement : MonoBehaviour
 
         _inputs.x = Input.GetAxis("Joy" + player + "X");
         _inputs.z = Input.GetAxis("Joy" + player + "Z") * -1;
+
+        if (!_isGrounded)
+        {
+            _inputs.x *= speed_limiter;
+            _inputs.z *= speed_limiter;
+        }
+        
 
         if (_inputs != Vector3.zero)
             transform.forward = _inputs;

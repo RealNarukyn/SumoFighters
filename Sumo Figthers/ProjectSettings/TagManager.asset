@@ -6,6 +6,7 @@ TagManager:
   tags:
   - targeteable
   - Canvas
+  - Arena
   layers:
   - Default
   - TransparentFX

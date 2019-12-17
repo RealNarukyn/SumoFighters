@@ -8,6 +8,8 @@ public class CharacterPush : MonoBehaviour
     float shootAngle;                                           // Elevation Angle
     [SerializeField]
     Transform force_sphere;
+    [SerializeField]
+    Transform force_area;
 
     private const float force_min = 1f;                         //Min Force that will be applied.
     private float force = force_min;                            //The FORCE that will be applied.
@@ -17,7 +19,7 @@ public class CharacterPush : MonoBehaviour
 
     private bool has_punched = false;                           //Knows wheter the player has punched or not.
     private float timer = 0;                                    //Counter of the current time.
-    private const float time_reset_punch = 0.4f;                //Time it will last the boolean HAS_PUNCHED.
+    private const float time_reset_punch = 0.1f;                //Time it will last the boolean HAS_PUNCHED.
 
     public void ChargePush()
     {
@@ -48,6 +50,12 @@ public class CharacterPush : MonoBehaviour
         force_sphere.localScale = new Vector3(percent, percent, percent);
     }
 
+    public void UpdateForceArea()
+    {
+        float percent = force / force_max;
+        force_area.localScale = new Vector3(percent, percent, percent);
+    }
+
     private void CheckForce()
     {
         if (force > force_max)
@@ -63,11 +71,11 @@ public class CharacterPush : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        float percent = force / force_max;
-        Gizmos.DrawSphere(transform.position, percent);           //For the moment is the way you can know visually with the force you're hitting. 
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    float percent = force / force_max;
+    //    Gizmos.DrawSphere(transform.position, percent);
+    //}
 
     private void OnTriggerStay(Collider other)
     {

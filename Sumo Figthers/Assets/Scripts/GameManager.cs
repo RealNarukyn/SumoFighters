@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     private List<CharacterPush> pushes;
 
     private MultipleTargetCamera cam;
+    private ArenaScript arena;
 
     private bool players_loaded = false;
     private bool is_playable = false;
@@ -62,6 +63,14 @@ public class GameManager : MonoBehaviour
             {
                 ReloadPlayers();
             }
+
+            if (Input.GetKey(KeyCode.LeftAlt))
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    RestartPlayers();
+                }
+            }
         }
     }
 
@@ -74,6 +83,7 @@ public class GameManager : MonoBehaviour
                 move.FixMove();
             }
 
+            TakeOutPlayers();
             CheckPlayers();
         }
     }
@@ -119,8 +129,8 @@ public class GameManager : MonoBehaviour
 
     //@TODO:
     //Mover esta variable players_out = 0;
-    private float players_out = 0;
-    private void CheckPlayers()
+    private float players_in = 0;
+    private void TakeOutPlayers()
     {
         foreach (GameObject player in fighters)
         {
@@ -129,21 +139,42 @@ public class GameManager : MonoBehaviour
                 player.SetActive(false);
 
                 player.transform.position = new Vector3(0, 20, 0);
-                players_out++;
-                Debug.Log("PLAYERS OUT: " + players_out);
+                players_in--;
+                Debug.Log("PLAYERS IN GAME: " + players_in);
             }
         }
+    }
 
-        if (players_out >= num_players - 1)
+    private void CheckPlayers()
+    {
+        switch (num_players)
         {
-            Time.timeScale = 0;
-            panel_escape.SetActive(true);
+            case 1:
+                //For the moment I don't need any funcitonality here.
+                //This is the case for the IA.
+                break;
+            case 2:
+            case 3:
+            case 4:
+                if (players_in <= 3)
+                {
+                    arena.UpdateSize();
+                }
+                
+                if (players_in <= 1)
+                {
+                    Time.timeScale = 0;
+                    panel_escape.SetActive(true);
+                }
+                break;
         }
     }
 
     private void LoadPlayers()
     {
         cam = FindObjectOfType<MultipleTargetCamera>();
+        arena = FindObjectOfType<ArenaScript>();
+
         panel_escape = FindObjectOfType<Canvas>().transform.GetChild(0).gameObject;
 
         for (int i = 0; i < num_players; i++)
@@ -162,7 +193,9 @@ public class GameManager : MonoBehaviour
             if (num_players > 1)
                 fighters[i].transform.LookAt(new Vector3(0, 5, 0));
         }
-        
+
+
+        players_in = num_players;
 
         players_loaded = !players_loaded;
         is_playable = !is_playable;
@@ -198,9 +231,12 @@ public class GameManager : MonoBehaviour
             pushes[i].LookPunchCD();
 
             pushes[i].UpdateForceSphere();
+            pushes[i].UpdateForceArea();
         }
     }
 
+    #region Loading Players Functions
+    //This function reloads the position of the players without clearing lists.
     private void ReloadPlayers()
     {
         for (int i = 0; i < num_players; i++)
@@ -216,9 +252,29 @@ public class GameManager : MonoBehaviour
             fighters[i].SetActive(true);
         }
 
+        arena.RestartSize();
         panel_escape.SetActive(false);
-        players_out = 0;
+        players_in = num_players;
         Time.timeScale = 1;
     }
 
+    //This function clears lists and sends the player to the Main Menu.
+    private void RestartPlayers()
+    {
+        players_loaded = false;
+        is_playable = false;
+
+        fighters.Clear();
+        movements.Clear();
+        pushes.Clear();
+
+        cam.ClearCamera();
+
+        panel_escape.SetActive(false);
+        players_in = 0;
+        Time.timeScale = 1;
+
+        SceneManager.LoadScene("Menu");
+    }
+    #endregion
 }
