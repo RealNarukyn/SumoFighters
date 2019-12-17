@@ -28,12 +28,6 @@ public class CharacterPush : MonoBehaviour
     public void Push()
     {
         has_punched = true;
-
-        //timer += Time.deltaTime;
-        //if (timer >= time_reset_punch)
-        //{
-        //    ResetPunchStats();
-        //}
     }
 
     public void LookPunchCD()
@@ -77,18 +71,24 @@ public class CharacterPush : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("COLLIDING");
-        Debug.Log("HAS PUNCHED STATE: " + has_punched);
-        
         if (has_punched)
         {
-            Debug.Log("HEY");
             Vector3 positionThrowed = other.transform.position + (transform.forward * force * Time.deltaTime);
+            bool already_punched = false;
 
-            if(other.GetComponent<Rigidbody>())
+            if (other.GetComponent<Rigidbody>())
+            {
+                already_punched = !already_punched;
                 other.GetComponent<Rigidbody>().AddForce(ParabollicVel(other.transform.position, positionThrowed, shootAngle), ForceMode.Impulse);
-
-
+            }
+              
+            if (!already_punched)
+            {
+                if (other.GetComponentInParent<Rigidbody>())
+                    other.GetComponentInParent<Rigidbody>().AddForce(ParabollicVel(other.transform.position, positionThrowed, shootAngle), ForceMode.Impulse);
+            }
+            
+                
             ResetPunchStats();
         }
     }
@@ -118,6 +118,4 @@ public class CharacterPush : MonoBehaviour
         force = 0;
         timer = 0;
     }
-
-    
 }

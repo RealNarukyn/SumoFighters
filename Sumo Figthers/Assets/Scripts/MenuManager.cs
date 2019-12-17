@@ -11,6 +11,12 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     GameObject selection_panel;
 
+    private void Start()
+    {
+        menu_panel = FindObjectOfType<Canvas>().transform.GetChild(0).gameObject;
+        selection_panel = FindObjectOfType<Canvas>().transform.GetChild(1).gameObject;
+    }
+
     public void ButtonPlay()
     {
         menu_panel.SetActive(false);
@@ -29,6 +35,8 @@ public class MenuManager : MonoBehaviour
 
 
         GameManager.instance.num_players = players;
+
+
 
         SceneManager.LoadScene("BattleArena");
     }

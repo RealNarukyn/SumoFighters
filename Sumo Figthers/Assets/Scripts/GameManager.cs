@@ -7,20 +7,12 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
-            Destroy(gameObject);
-
-        DontDestroyOnLoad(this);
-    }
-
     [SerializeField]
     private Material[] player_materials;
     [SerializeField]
     private GameObject player_prefab;
+    [SerializeField]
+    private GameObject panel_escape;
 
     public int num_players = 0;
 
@@ -29,17 +21,27 @@ public class GameManager : MonoBehaviour
     private List<CharacterPush> pushes;
 
     private MultipleTargetCamera cam;
-    
+
     private bool players_loaded = false;
     private bool is_playable = false;
 
 
-    private void Start()
+
+
+    private void Awake()
     {
+        if (instance == null)
+            instance = this;
+        else if (instance != this)
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(this);
+
         fighters = new List<GameObject>();
         movements = new List<CharacterMovement>();
         pushes = new List<CharacterPush>();
     }
+    
 
     private void Update()
     {
@@ -58,7 +60,7 @@ public class GameManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0)
             {
-                ReloadPlayers();                
+                ReloadPlayers();
             }
         }
     }
@@ -75,7 +77,7 @@ public class GameManager : MonoBehaviour
             CheckPlayers();
         }
     }
-    
+
     //@TODO:
     //Cambiar esta variable para que no exista de manera global
     Vector3 position;
@@ -84,12 +86,12 @@ public class GameManager : MonoBehaviour
         switch (num_players)
         {
             case 1:
-                position = new Vector3(0, 5, 0);     
+                position = new Vector3(0, 5, 0);
                 break;
             case 2:
                 if (player == 1)
                     position = new Vector3(5, 5, 10);
-                else 
+                else
                     position = new Vector3(-5, 5, -10);
                 break;
             case 3:
@@ -97,7 +99,7 @@ public class GameManager : MonoBehaviour
                     position = new Vector3(0, 5, 10);
                 else if (player == 1)
                     position = new Vector3(5, 5, -10);
-                else 
+                else
                     position = new Vector3(-5, 5, -10);
                 break;
             case 4:
@@ -107,7 +109,7 @@ public class GameManager : MonoBehaviour
                     position = new Vector3(5, 5, -10);
                 else if (player == 1)
                     position = new Vector3(-5, 5, 10);
-                else 
+                else
                     position = new Vector3(-5, 5, -10);
                 break;
 
@@ -135,12 +137,14 @@ public class GameManager : MonoBehaviour
         if (players_out >= num_players - 1)
         {
             Time.timeScale = 0;
+            panel_escape.SetActive(true);
         }
     }
 
     private void LoadPlayers()
     {
         cam = FindObjectOfType<MultipleTargetCamera>();
+        panel_escape = FindObjectOfType<Canvas>().transform.GetChild(0).gameObject;
 
         for (int i = 0; i < num_players; i++)
         {
@@ -156,8 +160,9 @@ public class GameManager : MonoBehaviour
             fighters[i].GetComponent<MeshRenderer>().material = player_materials[i];
             fighters[i].name = player_materials[i].name;
             if (num_players > 1)
-                fighters[i].transform.LookAt(new Vector3(0,5,0));
+                fighters[i].transform.LookAt(new Vector3(0, 5, 0));
         }
+        
 
         players_loaded = !players_loaded;
         is_playable = !is_playable;
@@ -168,7 +173,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < num_players; i++)
         {
             movements[i].Move(i);
-            
+
             if (Input.GetButtonDown("Joy" + i + "Jump"))
             {
                 movements[i].Jump(i);
@@ -200,12 +205,20 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < num_players; i++)
         {
+            cam.AddTargetToCamera(fighters[i].transform);
+
             SelectSpawnPoints(i);
             fighters[i].transform.position = position;
+
+            if (num_players > 1)
+                fighters[i].transform.LookAt(new Vector3(0, 5, 0));
+
             fighters[i].SetActive(true);
         }
 
+        panel_escape.SetActive(false);
         players_out = 0;
         Time.timeScale = 1;
     }
+
 }

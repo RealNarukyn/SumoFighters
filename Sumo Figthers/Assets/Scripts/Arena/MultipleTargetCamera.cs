@@ -89,4 +89,5 @@ public class MultipleTargetCamera : MonoBehaviour
     }
 
     public void AddTargetToCamera(Transform target) { targets.Add(target); }
+    public void ClearCamera() { targets.Clear(); }
 }

@@ -1669,6 +1669,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 9ef5e96f614527a44a5770561498ac2a, type: 2}
   player_prefab: {fileID: 8503743507930218738, guid: 1d5f00e0c0ec68e4097fc6a4228fa75b,
     type: 3}
+  panel_escape: {fileID: 0}
   num_players: 0
 --- !u!1 &1975520194
 GameObject:
