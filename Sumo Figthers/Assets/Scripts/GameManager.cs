@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour
     private bool players_loaded = false;
     private bool is_playable = false;
     private bool is_advicing = true;
-
+    
+    
 
 
 
@@ -194,6 +195,9 @@ public class GameManager : MonoBehaviour
         panel_advice = FindObjectOfType<Canvas>().transform.GetChild(0).gameObject;
         panel_escape = FindObjectOfType<Canvas>().transform.GetChild(1).gameObject;
 
+
+        Debug.Log("NUM PLAYERS: " + num_players);
+
         for (int i = 0; i < num_players; i++)
         {
             SelectSpawnPoints(i);
@@ -207,6 +211,7 @@ public class GameManager : MonoBehaviour
 
             fighters[i].GetComponent<MeshRenderer>().material = player_materials[i];
             fighters[i].name = player_materials[i].name;
+
             if (num_players > 1)
                 fighters[i].transform.LookAt(new Vector3(0, 5, 0));
         }
@@ -224,7 +229,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < num_players; i++)
         {
             movements[i].Move(i);
-
+           
             if (Input.GetButtonDown("Joy" + i + "Jump"))
             {
                 movements[i].Jump(i);
