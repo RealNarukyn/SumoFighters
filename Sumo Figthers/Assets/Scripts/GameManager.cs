@@ -160,27 +160,27 @@ public class GameManager : MonoBehaviour
                 break;
             case 2:
                 if (player == 1)
-                    position = new Vector3(5, 5, 10);
+                    position = new Vector3(7, 5, 7);
                 else
-                    position = new Vector3(-5, 5, -10);
+                    position = new Vector3(-7, 5, -7);
                 break;
             case 3:
                 if (player == 2)
-                    position = new Vector3(0, 5, 10);
+                    position = new Vector3(0, 5, 7);
                 else if (player == 1)
-                    position = new Vector3(5, 5, -10);
+                    position = new Vector3(7, 5, -7);
                 else
-                    position = new Vector3(-5, 5, -10);
+                    position = new Vector3(-7, 5, -7);
                 break;
             case 4:
                 if (player == 3)
-                    position = new Vector3(5, 5, 10);
+                    position = new Vector3(7, 5, 7);
                 else if (player == 2)
-                    position = new Vector3(5, 5, -10);
+                    position = new Vector3(7, 5, -7);
                 else if (player == 1)
-                    position = new Vector3(-5, 5, 10);
+                    position = new Vector3(-7, 5, 7);
                 else
-                    position = new Vector3(-5, 5, -10);
+                    position = new Vector3(-7, 5, -7);
                 break;
 
             default: break;
