@@ -8,7 +8,7 @@ public class MultipleTargetCamera : MonoBehaviour
     [SerializeField]
     private List<Transform> targets;
 
-    public Vector3 offset = new Vector3(0f, 16f, -30f);
+    public Vector3 offset; 
     private float smooth_time = .5f;
 
     private Vector3 velocity;
@@ -24,6 +24,8 @@ public class MultipleTargetCamera : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         targets = new List<Transform>();
+
+        offset = new Vector3(0f, 8f, -25f);
     }
 
     private void LateUpdate()
@@ -66,6 +68,7 @@ public class MultipleTargetCamera : MonoBehaviour
     {
         Vector3 center_point = GetCenterPoint();
 
+        Debug.Log("CENTER POINT: " + center_point);
         Vector3 new_position = center_point + offset;
 
         transform.position = Vector3.SmoothDamp(transform.position, new_position, ref velocity, smooth_time);
@@ -81,13 +84,13 @@ public class MultipleTargetCamera : MonoBehaviour
     {
         for (int i = 0; i < targets.Count; i++)
         {
-            if (targets[i].position.y < -1)
+            if (targets[i].position.y < -2)
             {
                 targets.RemoveAt(i);
             }
         }
     }
 
-    public void AddTargetToCamera(Transform target) { targets.Add(target); }
+    public void AddTargetToCamera(Transform target) { targets.Add(target); Debug.Log("target added"); }
     public void ClearCamera() { targets.Clear(); }
 }

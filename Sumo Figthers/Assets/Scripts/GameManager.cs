@@ -280,7 +280,7 @@ public class GameManager : MonoBehaviour
             fighters[i].SetActive(true);
         }
 
-        arena.RestartSize();
+        //arena.RestartSize();
         panel_escape.SetActive(false);
         players_in = num_players;
         Time.timeScale = 1;

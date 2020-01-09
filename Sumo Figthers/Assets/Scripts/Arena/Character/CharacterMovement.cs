@@ -36,8 +36,6 @@ public class CharacterMovement : MonoBehaviour
         _inputs.x = Input.GetAxis("Joy" + player + "X");
         _inputs.z = Input.GetAxis("Joy" + player + "Z") * -1;
 
-        Debug.Log("Player: " + player);
-
         if (!_isGrounded)
         {
             _inputs.x *= speed_limiter;
