@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
             case 4:
                 if (players_in < 3)
                 {
-                    arena.UpdateSize();
+                    //arena.UpdateSize();
                 }
                 
                 if (players_in <= 1)
@@ -153,34 +153,38 @@ public class GameManager : MonoBehaviour
     Vector3 position;
     private void SelectSpawnPoints(int player)
     {
+        int pos_x = 7;
+        int pos_y = 0;
+        int pos_z = 6;
+
         switch (num_players)
         {
             case 1:
-                position = new Vector3(0, 5, 0);
+                position = new Vector3(0, pos_y, 0);
                 break;
             case 2:
                 if (player == 1)
-                    position = new Vector3(7, 5, 7);
+                    position = new Vector3(pos_x, pos_y, pos_z);
                 else
-                    position = new Vector3(-7, 5, -7);
+                    position = new Vector3(-pos_x, pos_y, -pos_z);
                 break;
             case 3:
                 if (player == 2)
-                    position = new Vector3(0, 5, 7);
+                    position = new Vector3(0, pos_y, pos_z);
                 else if (player == 1)
-                    position = new Vector3(7, 5, -7);
+                    position = new Vector3(pos_x, pos_y, -pos_z);
                 else
-                    position = new Vector3(-7, 5, -7);
+                    position = new Vector3(-pos_x, pos_y, -pos_z);
                 break;
             case 4:
                 if (player == 3)
-                    position = new Vector3(7, 5, 7);
+                    position = new Vector3(pos_x, pos_y, pos_z);
                 else if (player == 2)
-                    position = new Vector3(7, 5, -7);
+                    position = new Vector3(pos_x, pos_y, -pos_z);
                 else if (player == 1)
-                    position = new Vector3(-7, 5, 7);
+                    position = new Vector3(-pos_x, pos_y, pos_z);
                 else
-                    position = new Vector3(-7, 5, -7);
+                    position = new Vector3(-pos_x, pos_y, -pos_z);
                 break;
 
             default: break;
@@ -213,7 +217,7 @@ public class GameManager : MonoBehaviour
             fighters[i].name = player_materials[i].name;
 
             if (num_players > 1)
-                fighters[i].transform.LookAt(new Vector3(0, 5, 0));
+                fighters[i].transform.LookAt(new Vector3(0, Vector3.forward.y, 0));
         }
 
 
