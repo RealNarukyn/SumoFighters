@@ -233,13 +233,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393088948db25ed4caeec63a250f69d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
-  JumpHeight: 2
-  GroundDistance: 0.2
-  DashDistance: 5
   Ground:
     serializedVersion: 2
     m_Bits: 512
+  Floor:
+    serializedVersion: 2
+    m_Bits: 1024
   _body: {fileID: 8503743507930218740}
   _groundChecker: {fileID: 8503743506437753186}
 --- !u!1 &8503743508027038728

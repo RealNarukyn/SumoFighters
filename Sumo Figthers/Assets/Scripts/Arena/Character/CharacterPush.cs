@@ -15,7 +15,7 @@ public class CharacterPush : MonoBehaviour
     private float force = force_min;                            //The FORCE that will be applied.
     private const float force_max = 400f;                       //Max Force it can be applied.
 
-    private float multiplier = 5.53f;                           //The needed increment per frame to make it last 1.2 seconds.
+    private float multiplier = 8f;                           //The needed increment per frame to make it last 1.2 seconds.
 
     private bool has_punched = false;                           //Knows wheter the player has punched or not.
     private float timer = 0;                                    //Counter of the current time.

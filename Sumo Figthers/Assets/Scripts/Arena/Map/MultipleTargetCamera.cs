@@ -7,6 +7,8 @@ public class MultipleTargetCamera : MonoBehaviour
 {
     [SerializeField]
     private List<Transform> targets;
+    [SerializeField]
+    private List<CharacterMovement> players;
 
     public Vector3 offset; 
     private float smooth_time = .5f;
@@ -24,8 +26,14 @@ public class MultipleTargetCamera : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         targets = new List<Transform>();
+        players = new List<CharacterMovement>();
 
         offset = new Vector3(0f, 8f, -25f);
+    }
+
+    private void FixedUpdate()
+    {
+        
     }
 
     private void LateUpdate()
@@ -67,8 +75,7 @@ public class MultipleTargetCamera : MonoBehaviour
     private void Move()
     {
         Vector3 center_point = GetCenterPoint();
-
-        Debug.Log("CENTER POINT: " + center_point);
+        
         Vector3 new_position = center_point + offset;
 
         transform.position = Vector3.SmoothDamp(transform.position, new_position, ref velocity, smooth_time);
@@ -79,18 +86,34 @@ public class MultipleTargetCamera : MonoBehaviour
         float zoom_new = Mathf.Lerp(zoom_max, zoom_min, GetGreatestDistance() / zoom_limiter);
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, zoom_new, Time.deltaTime);
     }
-
+     
     private void CheckTargets() 
     {
-        for (int i = 0; i < targets.Count; i++)
+        for (int i = 0; i < players.Count; i++)
         {
-            if (targets[i].position.y < -2)
+            if (targets.Count > 0)
             {
-                targets.RemoveAt(i);
+                if (players[i].touchingFloor() && !players[i].alreadyChecked())
+                {
+                    players[i].changeCheckedCondition(true);
+                    
+                    GameManager.instance.players_in--;
+                    
+                    targets.RemoveAt(i);
+                    players.RemoveAt(i);
+                }
+                
             }
         }
     }
 
-    public void AddTargetToCamera(Transform target) { targets.Add(target); Debug.Log("target added"); }
-    public void ClearCamera() { targets.Clear(); }
+
+    public void AddTargetToCamera(Transform target, CharacterMovement player) 
+    { 
+        targets.Add(target);
+        players.Add(player);
+    }
+    public void TakeOutTarget(int player) { targets.RemoveAt(player); }
+    public void ClearCamera() { targets.Clear(); players.Clear(); }
+
 }

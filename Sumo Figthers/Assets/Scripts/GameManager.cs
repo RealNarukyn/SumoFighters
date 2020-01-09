@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public int num_players = 0;
 
     private List<GameObject> fighters;
-    private List<CharacterMovement> movements;
+    public List<CharacterMovement> movements;
     private List<CharacterPush> pushes;
 
     private MultipleTargetCamera cam;
@@ -28,8 +28,8 @@ public class GameManager : MonoBehaviour
     private bool players_loaded = false;
     private bool is_playable = false;
     private bool is_advicing = true;
-    
-    
+
+    public int players_in;
 
 
 
@@ -68,12 +68,12 @@ public class GameManager : MonoBehaviour
                 PlayersPush();
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0)
+            if (Input.GetKeyDown(KeyCode.R) && Time.timeScale == 0)
             {
                 ReloadPlayers();
             }
 
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
                 RestartPlayers();
             }
@@ -90,7 +90,8 @@ public class GameManager : MonoBehaviour
                 move.FixMove();
             }
 
-            TakeOutPlayers();
+            //TakeOutPlayers();
+            Debug.Log("PLAYERS IN: " + players_in);
             CheckPlayers();
         }
     }
@@ -105,22 +106,33 @@ public class GameManager : MonoBehaviour
         is_playable = !is_playable;
     }
 
-    //@TODO:
-    //Mover esta variable players_out = 0;
-    private float players_in = 0;
+    
     private void TakeOutPlayers()
     {
-        foreach (GameObject player in fighters)
-        {
-            if (player.transform.position.y < -5)
-            {
-                player.SetActive(false);
+        //foreach (CharacterMovement player in movements)
+        //{
+        //    Debug.Log("PLAYER [ " + player.name + " ] IN FLOOR [ " + player.touchingFloor() + " ] CHECKED [ " + player.alreadyChecked() + " ]");
 
-                player.transform.position = new Vector3(0, 20, 0);
-                players_in--;
-                Debug.Log("PLAYERS IN GAME: " + players_in);
-            }
-        }
+        //    if (player.touchingFloor() && !player.alreadyChecked())
+        //    {
+        //        Debug.Log("THE PLAYER " + player.name + " GOT OUT.");
+
+        //        //player.SetActive(false);
+        //        //player.GetComponent<CharacterMovement>().enabled = false;
+        //        //player.GetComponentInChildren<CharacterPush>().enabled = false;
+
+        //        //player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+
+        //        //player.transform.position = new Vector3(0, 20, 0);
+                
+        //        cam.TakeOutTarget(player.getPlayer());
+
+        //        player.changeCheckedCondition(true);
+                
+        //        players_in--;
+        //        Debug.Log("PLAYERS IN GAME: " + players_in);
+        //    }
+        //}
     }
 
     private void CheckPlayers()
@@ -153,9 +165,9 @@ public class GameManager : MonoBehaviour
     Vector3 position;
     private void SelectSpawnPoints(int player)
     {
-        int pos_x = 7;
-        int pos_y = 0;
-        int pos_z = 6;
+        int pos_1 = 7;
+        int pos_y = 4;
+        int pos_2 = 0;
 
         switch (num_players)
         {
@@ -164,27 +176,27 @@ public class GameManager : MonoBehaviour
                 break;
             case 2:
                 if (player == 1)
-                    position = new Vector3(pos_x, pos_y, pos_z);
+                    position = new Vector3(pos_1, pos_y, pos_2);
                 else
-                    position = new Vector3(-pos_x, pos_y, -pos_z);
+                    position = new Vector3(-pos_1, pos_y, pos_2);
                 break;
             case 3:
                 if (player == 2)
-                    position = new Vector3(0, pos_y, pos_z);
+                    position = new Vector3(pos_2, pos_y, pos_1);
                 else if (player == 1)
-                    position = new Vector3(pos_x, pos_y, -pos_z);
+                    position = new Vector3(pos_1, pos_y, pos_2);
                 else
-                    position = new Vector3(-pos_x, pos_y, -pos_z);
+                    position = new Vector3(-pos_1, pos_y, pos_2);
                 break;
             case 4:
                 if (player == 3)
-                    position = new Vector3(pos_x, pos_y, pos_z);
+                    position = new Vector3(6, pos_y, 0);
                 else if (player == 2)
-                    position = new Vector3(pos_x, pos_y, -pos_z);
+                    position = new Vector3(-pos_1, pos_y, pos_2);
                 else if (player == 1)
-                    position = new Vector3(-pos_x, pos_y, pos_z);
+                    position = new Vector3(pos_2, pos_y, pos_1);
                 else
-                    position = new Vector3(-pos_x, pos_y, -pos_z);
+                    position = new Vector3(pos_2, pos_y, -pos_1);
                 break;
 
             default: break;
@@ -207,14 +219,16 @@ public class GameManager : MonoBehaviour
             SelectSpawnPoints(i);
 
             fighters.Add(Instantiate(player_prefab, position, Quaternion.Euler(0, 0, 0)));
-            cam.AddTargetToCamera(fighters[i].transform);
 
             movements.Add(fighters[i].GetComponent<CharacterMovement>());
             pushes.Add(fighters[i].GetComponentInChildren<CharacterPush>());
 
+            cam.AddTargetToCamera(fighters[i].transform, movements[i]);
 
             fighters[i].GetComponent<MeshRenderer>().material = player_materials[i];
             fighters[i].name = player_materials[i].name;
+
+            movements[i].setPlayer(i);
 
             if (num_players > 1)
                 fighters[i].transform.LookAt(new Vector3(0, Vector3.forward.y, 0));
@@ -236,7 +250,9 @@ public class GameManager : MonoBehaviour
            
             if (Input.GetButtonDown("Joy" + i + "Jump"))
             {
-                movements[i].Jump(i);
+                Debug.Log("HEY JUMPING");
+
+                movements[i].Jump();
             }
         }
     }
@@ -269,15 +285,19 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < num_players; i++)
         {
-            cam.AddTargetToCamera(fighters[i].transform);
+            cam.AddTargetToCamera(fighters[i].transform, movements[i]);
 
             SelectSpawnPoints(i);
             fighters[i].transform.position = position;
 
             if (num_players > 1)
-                fighters[i].transform.LookAt(new Vector3(0, 5, 0));
+                fighters[i].transform.LookAt(new Vector3(0, Vector3.forward.y, 0));
+            
+            fighters[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
 
-            fighters[i].SetActive(true);
+            fighters[i].GetComponent<CharacterMovement>().enabled = true;
+            fighters[i].GetComponentInChildren<CharacterPush>().enabled = true;
+
         }
 
         //arena.RestartSize();
