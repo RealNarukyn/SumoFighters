@@ -79,8 +79,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
-    
+
     private void LateUpdate()
     {
         if (is_playable)
@@ -92,12 +91,12 @@ public class GameManager : MonoBehaviour
 
             CheckPlayers();
         }
+
     }
 
 
 
-
-    private void StartPlay()
+        private void StartPlay()
     {
         is_advicing = !is_advicing;
         panel_advice.SetActive(false);
@@ -119,7 +118,7 @@ public class GameManager : MonoBehaviour
             case 4:
                 if (players_in < 3)
                 {
-                    //arena.UpdateSize();
+                    arena.UpdateSize();
                 }
                 
                 if (players_in <= 1)
@@ -271,7 +270,7 @@ public class GameManager : MonoBehaviour
             movements[i].changeCheckedCondition(false);
         }
 
-        //arena.RestartSize();
+        arena.RestartSize();
         panel_escape.SetActive(false);
         players_in = num_players;
         Time.timeScale = 1;
