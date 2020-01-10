@@ -65,7 +65,7 @@ public class CharacterMovement : MonoBehaviour
     {
         _inFloor = Physics.CheckSphere(_groundChecker.position, GroundDistance, Floor, QueryTriggerInteraction.Ignore);
 
-        if(_inputs.magnitude > 0.2f && !_inFloor)
+        if(_inputs.magnitude > 0.4f && !_inFloor)
             _body.MovePosition(_body.position + _inputs * Speed * Time.fixedDeltaTime);
         
         if (_inFloor && !_alreadyChecked)

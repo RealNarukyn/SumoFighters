@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
                 PlayersPush();
             }
 
-            if (Input.GetKeyDown(KeyCode.R) && Time.timeScale == 0)
+            if (Input.GetKeyDown(KeyCode.R) && Time.timeScale < 1)
             {
                 ReloadPlayers();
             }
@@ -123,9 +123,11 @@ public class GameManager : MonoBehaviour
                 
                 if (players_in <= 1)
                 {
+                    arena.changeGameState();
+
                     cam.ClearCamera();
 
-                    Time.timeScale = 0;
+                    Time.timeScale = 0.2f;
                     panel_escape.SetActive(true);
                 }
                 break;
