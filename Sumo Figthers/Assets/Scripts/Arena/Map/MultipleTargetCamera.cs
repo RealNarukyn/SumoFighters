@@ -31,11 +31,6 @@ public class MultipleTargetCamera : MonoBehaviour
         offset = new Vector3(0f, 8f, -25f);
     }
 
-    private void FixedUpdate()
-    {
-        
-    }
-
     private void LateUpdate()
     {
         if (targets.Count == 0)
@@ -43,6 +38,9 @@ public class MultipleTargetCamera : MonoBehaviour
 
         Move();
         Zoom();
+
+        if (targets.Count == 0)
+            return;
 
         CheckTargets();
     }
@@ -95,6 +93,7 @@ public class MultipleTargetCamera : MonoBehaviour
             {
                 if (players[i].touchingFloor() && !players[i].alreadyChecked())
                 {
+                    //Debug.Log("PLAYER [ " + players[i].name + " ]  FLOOR [ " + players[i].touchingFloor() + " ] CHECKED [ " + players[i].alreadyChecked() + " ]");
                     players[i].changeCheckedCondition(true);
                     
                     GameManager.instance.players_in--;
@@ -102,7 +101,6 @@ public class MultipleTargetCamera : MonoBehaviour
                     targets.RemoveAt(i);
                     players.RemoveAt(i);
                 }
-                
             }
         }
     }
@@ -113,7 +111,13 @@ public class MultipleTargetCamera : MonoBehaviour
         targets.Add(target);
         players.Add(player);
     }
+
     public void TakeOutTarget(int player) { targets.RemoveAt(player); }
-    public void ClearCamera() { targets.Clear(); players.Clear(); }
+    
+    public void ClearCamera() 
+    {
+        targets.Clear(); 
+        players.Clear(); 
+    }
 
 }

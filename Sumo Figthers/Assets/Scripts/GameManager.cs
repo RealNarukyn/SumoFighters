@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
     }
     
     
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         if (is_playable)
         {
@@ -90,8 +90,6 @@ public class GameManager : MonoBehaviour
                 move.FixMove();
             }
 
-            //TakeOutPlayers();
-            Debug.Log("PLAYERS IN: " + players_in);
             CheckPlayers();
         }
     }
@@ -106,37 +104,10 @@ public class GameManager : MonoBehaviour
         is_playable = !is_playable;
     }
 
-    
-    private void TakeOutPlayers()
-    {
-        //foreach (CharacterMovement player in movements)
-        //{
-        //    Debug.Log("PLAYER [ " + player.name + " ] IN FLOOR [ " + player.touchingFloor() + " ] CHECKED [ " + player.alreadyChecked() + " ]");
-
-        //    if (player.touchingFloor() && !player.alreadyChecked())
-        //    {
-        //        Debug.Log("THE PLAYER " + player.name + " GOT OUT.");
-
-        //        //player.SetActive(false);
-        //        //player.GetComponent<CharacterMovement>().enabled = false;
-        //        //player.GetComponentInChildren<CharacterPush>().enabled = false;
-
-        //        //player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-
-        //        //player.transform.position = new Vector3(0, 20, 0);
-                
-        //        cam.TakeOutTarget(player.getPlayer());
-
-        //        player.changeCheckedCondition(true);
-                
-        //        players_in--;
-        //        Debug.Log("PLAYERS IN GAME: " + players_in);
-        //    }
-        //}
-    }
-
     private void CheckPlayers()
     {
+
+        Debug.Log("PLAYERS IN: " + players_in);
         switch (num_players)
         {
             case 1:
@@ -153,6 +124,8 @@ public class GameManager : MonoBehaviour
                 
                 if (players_in <= 1)
                 {
+                    cam.ClearCamera();
+
                     Time.timeScale = 0;
                     panel_escape.SetActive(true);
                 }
@@ -231,7 +204,7 @@ public class GameManager : MonoBehaviour
             movements[i].setPlayer(i);
 
             if (num_players > 1)
-                fighters[i].transform.LookAt(new Vector3(0, Vector3.forward.y, 0));
+                fighters[i].transform.LookAt(new Vector3(0, 4, 0));
         }
 
 
@@ -250,8 +223,6 @@ public class GameManager : MonoBehaviour
            
             if (Input.GetButtonDown("Joy" + i + "Jump"))
             {
-                Debug.Log("HEY JUMPING");
-
                 movements[i].Jump();
             }
         }
@@ -283,6 +254,8 @@ public class GameManager : MonoBehaviour
     //This function reloads the position of the players without clearing lists.
     private void ReloadPlayers()
     {
+        cam.ClearCamera();
+
         for (int i = 0; i < num_players; i++)
         {
             cam.AddTargetToCamera(fighters[i].transform, movements[i]);
@@ -291,13 +264,11 @@ public class GameManager : MonoBehaviour
             fighters[i].transform.position = position;
 
             if (num_players > 1)
-                fighters[i].transform.LookAt(new Vector3(0, Vector3.forward.y, 0));
-            
+                fighters[i].transform.LookAt(new Vector3(0, 4, 0));
+
             fighters[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
 
-            fighters[i].GetComponent<CharacterMovement>().enabled = true;
-            fighters[i].GetComponentInChildren<CharacterPush>().enabled = true;
-
+            movements[i].changeCheckedCondition(false);
         }
 
         //arena.RestartSize();

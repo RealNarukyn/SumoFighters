@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    private float Speed = 6f;
+    private float Speed = 8f;
     private float speed_limiter = 0.5f;
     private float JumpHeight = 2f;
     private float GroundDistance = 0.2f;
@@ -65,7 +65,7 @@ public class CharacterMovement : MonoBehaviour
     {
         _inFloor = Physics.CheckSphere(_groundChecker.position, GroundDistance, Floor, QueryTriggerInteraction.Ignore);
 
-        if(_inputs.magnitude > 0.2 && !_inFloor)
+        if(_inputs.magnitude > 0.2f && !_inFloor)
             _body.MovePosition(_body.position + _inputs * Speed * Time.fixedDeltaTime);
         
         if (_inFloor && !_alreadyChecked)
