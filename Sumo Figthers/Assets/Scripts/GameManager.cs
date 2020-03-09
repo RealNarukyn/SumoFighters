@@ -19,8 +19,9 @@ public class GameManager : MonoBehaviour
     public int num_players = 0;
 
     private List<GameObject> fighters;
-    public List<CharacterMovement> movements;
+    private List<CharacterMovement> movements;
     private List<CharacterPush> pushes;
+    private List<CharacterAudio> audios;
 
     private MultipleTargetCamera cam;
     private ArenaScript arena;
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
         fighters = new List<GameObject>();
         movements = new List<CharacterMovement>();
         pushes = new List<CharacterPush>();
+        audios = new List<CharacterAudio>();
     }
     
 
@@ -89,15 +91,33 @@ public class GameManager : MonoBehaviour
                 move.FixMove();
             }
 
+            CheckDistantePlayerToRing();
+
             CheckPlayers();
         }
 
     }
 
-
-
-        private void StartPlay()
+    
+    private void CheckDistantePlayerToRing()
     {
+        for (int i = 0; i < movements.Count; i++)
+        {
+            if (movements[i].amIFighting)
+            {
+                if (Vector3.Distance(movements[i].transform.position, arena.transform.position) > 11)
+                {
+                    movements[i].amIFighting = false;
+                    audios[i].PlaySFX((int)CharacterAudio.SFXSounds.Scream, 0.5f);
+                }
+            }
+        }
+    }
+
+    private void StartPlay()
+    {
+        AudioManager.Instance.PlayMusic((int)AudioManager.MusicClips.game_loop);
+        
         is_advicing = !is_advicing;
         panel_advice.SetActive(false);
         is_playable = !is_playable;
@@ -105,8 +125,6 @@ public class GameManager : MonoBehaviour
 
     private void CheckPlayers()
     {
-
-        Debug.Log("PLAYERS IN: " + players_in);
         switch (num_players)
         {
             case 1:
@@ -195,7 +213,9 @@ public class GameManager : MonoBehaviour
             fighters.Add(Instantiate(player_prefab, position, Quaternion.Euler(0, 0, 0)));
 
             movements.Add(fighters[i].GetComponent<CharacterMovement>());
+            audios.Add(fighters[i].GetComponent<CharacterAudio>());
             pushes.Add(fighters[i].GetComponentInChildren<CharacterPush>());
+            
 
             cam.AddTargetToCamera(fighters[i].transform, movements[i]);
 
@@ -225,6 +245,7 @@ public class GameManager : MonoBehaviour
             if (Input.GetButtonDown("Joy" + i + "Jump"))
             {
                 movements[i].Jump();
+                audios[i].PlaySFX((int)CharacterAudio.SFXSounds.Jump);
             }
         }
     }
@@ -241,6 +262,7 @@ public class GameManager : MonoBehaviour
             if (Input.GetButtonUp("Joy" + i + "Push"))
             {
                 pushes[i].Push();
+                audios[i].PlaySFX((int)CharacterAudio.SFXSounds.Punch);
             }
 
             pushes[i].LookPunchCD();
@@ -270,6 +292,8 @@ public class GameManager : MonoBehaviour
             fighters[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
 
             movements[i].changeCheckedCondition(false);
+
+            movements[i].amIFighting = true;
         }
 
         arena.RestartSize();
@@ -289,6 +313,7 @@ public class GameManager : MonoBehaviour
         fighters.Clear();
         movements.Clear();
         pushes.Clear();
+        audios.Clear();
         cam.ClearCamera();
 
         Time.timeScale = 1;

@@ -12,7 +12,10 @@ public class CharacterMovement : MonoBehaviour
     private int whoIAm;
     public int getPlayer() { return whoIAm; }
     public void setPlayer(int player) { whoIAm = player; }
-    
+
+
+    public bool amIFighting = true;
+
     //Maybe I can add it to the game.
     //private float DashDistance = 5f;
     
@@ -57,8 +60,13 @@ public class CharacterMovement : MonoBehaviour
 
     public void Jump()
     {
-        if(_isGrounded)
+        if (_isGrounded)
+        {
             _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
+
+            //AudioManager.Instance.PlaySFX((int)AudioManager.SFXSounds.Jump);
+        }
+        
     }
 
     public void FixMove()

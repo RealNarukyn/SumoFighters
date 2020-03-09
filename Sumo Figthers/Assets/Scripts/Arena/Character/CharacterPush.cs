@@ -11,6 +11,8 @@ public class CharacterPush : MonoBehaviour
     [SerializeField]
     Transform force_area;
 
+    CharacterAudio audio;
+
     private const float force_min = 1f;                         //Min Force that will be applied.
     private float force = force_min;                            //The FORCE that will be applied.
     private const float force_max = 400f;                       //Max Force it can be applied.
@@ -71,12 +73,6 @@ public class CharacterPush : MonoBehaviour
         }
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    float percent = force / force_max;
-    //    Gizmos.DrawSphere(transform.position, percent);
-    //}
-
     private void OnTriggerStay(Collider other)
     {
         if (has_punched)
@@ -93,7 +89,10 @@ public class CharacterPush : MonoBehaviour
             if (!already_punched)
             {
                 if (other.GetComponentInParent<Rigidbody>())
+                {
                     other.GetComponentInParent<Rigidbody>().AddForce(ParabollicVel(other.transform.position, positionThrowed, shootAngle), ForceMode.Impulse);
+                }
+                
             }
             
                 

@@ -29,9 +29,6 @@ public class EspectatorMovement : MonoBehaviour
         rb.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    
 
-    }
 }

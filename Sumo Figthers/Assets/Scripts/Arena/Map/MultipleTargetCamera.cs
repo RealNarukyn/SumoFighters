@@ -93,11 +93,12 @@ public class MultipleTargetCamera : MonoBehaviour
             {
                 if (players[i].touchingFloor() && !players[i].alreadyChecked())
                 {
-                    //Debug.Log("PLAYER [ " + players[i].name + " ]  FLOOR [ " + players[i].touchingFloor() + " ] CHECKED [ " + players[i].alreadyChecked() + " ]");
+                    //AudioManager.Instance.PlaySFX((int)AudioManager.SFXSounds.Scream);
+
                     players[i].changeCheckedCondition(true);
                     
                     GameManager.instance.players_in--;
-                    
+
                     targets.RemoveAt(i);
                     players.RemoveAt(i);
                 }
